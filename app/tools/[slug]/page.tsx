@@ -4,9 +4,9 @@ import { getToolById, tools } from '@/lib/tools'
 import type { Metadata } from 'next'
 
 interface ToolPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
@@ -16,7 +16,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
-  const tool = getToolById(params.slug)
+  const resolvedParams = await params
+  const tool = getToolById(resolvedParams.slug)
   
   if (!tool) {
     return {
@@ -31,8 +32,9 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   }
 }
 
-export default function ToolPage({ params }: ToolPageProps) {
-  const tool = getToolById(params.slug)
+export default async function ToolPage({ params }: ToolPageProps) {
+  const resolvedParams = await params
+  const tool = getToolById(resolvedParams.slug)
 
   if (!tool) {
     notFound()

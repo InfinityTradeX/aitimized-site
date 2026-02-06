@@ -1,56 +1,53 @@
-'use client'
-
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { getToolById } from '@/lib/tools'
+import { notFound, redirect } from 'next/navigation'
+import { getToolById, tools } from '@/lib/tools'
 
 interface RedirectPageProps {
-  params: {
+  params: Promise<{
     tool: string
-  }
+  }>
 }
 
-export default function RedirectPage({ params }: RedirectPageProps) {
-  const router = useRouter()
-  const tool = getToolById(params.tool)
+// Generate static params for all tools
+export async function generateStaticParams() {
+  return tools.map((tool) => ({
+    tool: tool.id,
+  }))
+}
 
-  useEffect(() => {
-    if (tool) {
-      // Track the click (you can add analytics here)
-      console.log(`Redirecting to ${tool.name}: ${tool.partnerStackUrl}`)
-      
-      // Redirect to PartnerStack URL
-      window.location.href = tool.partnerStackUrl
-    } else {
-      // If tool not found, redirect to tools page
-      router.push('/tools')
-    }
-  }, [tool, router, params.tool])
+export default async function RedirectPage({ params }: RedirectPageProps) {
+  const resolvedParams = await params
+  const tool = getToolById(resolvedParams.tool)
 
+  if (!tool) {
+    notFound()
+  }
+
+  // For static export, we'll use meta refresh redirect
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600 mb-4"></div>
-        {tool ? (
-          <>
+    <html>
+      <head>
+        <meta httpEquiv="refresh" content={`0;url=${tool.partnerStackUrl}`} />
+        <title>Redirecting to {tool.name}...</title>
+      </head>
+      <body>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center p-8">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600 mb-4"></div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Redirecting to {tool.name}...
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               You&apos;ll be taken to their website in a moment.
             </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Tool not found
-            </h1>
-            <p className="text-gray-600">
-              Redirecting to our tools page...
+            <p className="text-sm text-gray-500">
+              If you are not redirected automatically, 
+              <a href={tool.partnerStackUrl} className="text-primary-600 hover:underline ml-1">
+                click here
+              </a>.
             </p>
-          </>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      </body>
+    </html>
   )
 }

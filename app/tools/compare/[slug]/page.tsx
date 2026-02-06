@@ -4,9 +4,9 @@ import { getToolById } from '@/lib/tools'
 import type { Metadata } from 'next'
 
 interface ComparePageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Predefined comparisons
@@ -22,7 +22,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ComparePageProps): Promise<Metadata> {
-  const comparison = comparisons.find(c => c.slug === params.slug)
+  const resolvedParams = await params
+  const comparison = comparisons.find(c => c.slug === resolvedParams.slug)
   
   if (!comparison) {
     return { title: 'Comparison Not Found - aitimized' }
@@ -42,8 +43,9 @@ export async function generateMetadata({ params }: ComparePageProps): Promise<Me
   }
 }
 
-export default function ComparePage({ params }: ComparePageProps) {
-  const comparison = comparisons.find(c => c.slug === params.slug)
+export default async function ComparePage({ params }: ComparePageProps) {
+  const resolvedParams = await params
+  const comparison = comparisons.find(c => c.slug === resolvedParams.slug)
   
   if (!comparison) {
     notFound()
