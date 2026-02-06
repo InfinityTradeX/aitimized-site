@@ -53,28 +53,49 @@ def add_tool_to_data_file(tool_data, lib_path):
         print("Error: Could not find tools array in tools.ts")
         return False
     
+    # Helper function to escape single quotes in strings
+    def escape_string(s):
+        """Escape single quotes and backslashes for TypeScript strings"""
+        if not s:
+            return ''
+        return s.replace('\\', '\\\\').replace("'", "\\'")
+    
     # Create new tool object string
     features_str = json.dumps(tool_data.get('features', []), indent=6)
     pros_str = json.dumps(tool_data.get('pros', []), indent=6)
     cons_str = json.dumps(tool_data.get('cons', []), indent=6)
     
+    # Escape all string values
+    tool_id = escape_string(tool_data['id'])
+    tool_name = escape_string(tool_data['name'])
+    tool_desc = escape_string(tool_data['description'])
+    tool_benefit = escape_string(tool_data['optimizationBenefit'])
+    tool_category = escape_string(tool_data['category'])
+    tool_url = escape_string(tool_data['partnerStackUrl'])
+    tool_pricing = escape_string(tool_data.get('pricing', ''))
+    
     new_tool = f'''  {{
-    id: '{tool_data['id']}',
-    name: '{tool_data['name']}',
-    description: '{tool_data['description']}',
-    optimizationBenefit: '{tool_data['optimizationBenefit']}',
-    category: '{tool_data['category']}',
-    partnerStackUrl: '{tool_data['partnerStackUrl']}',
+    id: '{tool_id}',
+    name: '{tool_name}',
+    description: '{tool_desc}',
+    optimizationBenefit: '{tool_benefit}',
+    category: '{tool_category}',
+    partnerStackUrl: '{tool_url}',
     features: {features_str},
     pros: {pros_str},
     cons: {cons_str},
-    pricing: '{tool_data.get('pricing', '')}',
+    pricing: '{tool_pricing}',
   }}'''
     
     # Insert before the closing bracket of the array
     existing_tools = tools_array_match.group(1).strip()
+    
+    # Remove trailing comma from existing tools if present
+    if existing_tools.endswith(','):
+        existing_tools = existing_tools[:-1]
+    
     if existing_tools:
-        new_tools_array = f"export const tools: Tool[] = [\n{existing_tools},\n{new_tool}\n];"
+        new_tools_array = f"export const tools: Tool[] = [\n  {existing_tools},\n{new_tool}\n];"
     else:
         new_tools_array = f"export const tools: Tool[] = [\n{new_tool}\n];"
     
