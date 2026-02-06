@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-200;
+  }
+
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-beginner {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-intermediate {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-advanced {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .tag {
+    @apply inline-block px-2 py-1 bg-primary-100 text-primary-800 rounded text-xs mr-2 mb-2;
+  }
+
+  .prose-custom {
+    @apply prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-primary-600 prose-strong:text-gray-900 prose-code:text-primary-600 prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded;
+  }
+}
+
+body {
+  @apply bg-gray-50 text-gray-900;
+}
