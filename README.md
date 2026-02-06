@@ -1,6 +1,10 @@
 # aitimized.com
 
+[![Deploy to GitHub Pages](https://github.com/InfinityTradeX/aitimized-site/actions/workflows/deploy.yml/badge.svg)](https://github.com/InfinityTradeX/aitimized-site/actions/workflows/deploy.yml)
+
 AI workflows, prompts, and automation blueprints - curated content hub for AI-powered business optimization.
+
+**🌐 Live Site:** [https://infinitytradex.github.io/aitimized-site/](https://infinitytradex.github.io/aitimized-site/)
 
 ## Overview
 
@@ -43,6 +47,23 @@ npm run build
 ```
 
 This generates a static export in the `out` directory.
+
+### Deployment
+
+The site is automatically deployed to GitHub Pages on every push to the main branch.
+
+**Live URL:** [https://infinitytradex.github.io/aitimized-site/](https://infinitytradex.github.io/aitimized-site/)
+
+**Manual deployment:**
+1. Build the site: `npm run build`
+2. The static files in `out/` directory are ready for deployment
+3. Deploy to any static hosting service (GitHub Pages, Vercel, Netlify, etc.)
+
+**GitHub Pages deployment workflow:**
+- Automatically triggered on push to main/master branch
+- Builds the site with `npm run build`
+- Deploys the `out/` directory to GitHub Pages
+- Available at the GitHub Pages URL within minutes
 
 ## Affiliate Hub Features
 
