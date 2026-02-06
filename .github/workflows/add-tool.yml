@@ -1,0 +1,107 @@
+name: Add Affiliate Tool
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool_name:
+        description: 'Tool Name (e.g., "ChatGPT Plus")'
+        required: true
+        type: string
+      partnerstack_url:
+        description: 'PartnerStack Affiliate URL'
+        required: true
+        type: string
+      description:
+        description: 'Tool Description (optional)'
+        required: false
+        type: string
+      category:
+        description: 'Category (e.g., Content Creation, Productivity)'
+        required: false
+        default: 'AI Tools'
+        type: string
+      optimization_benefit:
+        description: 'Optimization Benefit (optional)'
+        required: false
+        type: string
+      pricing:
+        description: 'Pricing Info (optional)'
+        required: false
+        type: string
+      features:
+        description: 'Features (comma-separated, optional)'
+        required: false
+        type: string
+      pros:
+        description: 'Pros (comma-separated, optional)'
+        required: false
+        type: string
+      cons:
+        description: 'Cons (comma-separated, optional)'
+        required: false
+        type: string
+
+jobs:
+  add-tool:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run add_tool script
+        run: |
+          python scripts/add_tool.py \
+            --name "${{ github.event.inputs.tool_name }}" \
+            --url "${{ github.event.inputs.partnerstack_url }}" \
+            ${{ github.event.inputs.description && format('--description "{0}"', github.event.inputs.description) || '' }} \
+            ${{ github.event.inputs.category && format('--category "{0}"', github.event.inputs.category) || '' }} \
+            ${{ github.event.inputs.optimization_benefit && format('--benefit "{0}"', github.event.inputs.optimization_benefit) || '' }} \
+            ${{ github.event.inputs.pricing && format('--pricing "{0}"', github.event.inputs.pricing) || '' }} \
+            ${{ github.event.inputs.features && format('--features "{0}"', github.event.inputs.features) || '' }} \
+            ${{ github.event.inputs.pros && format('--pros "{0}"', github.event.inputs.pros) || '' }} \
+            ${{ github.event.inputs.cons && format('--cons "{0}"', github.event.inputs.cons) || '' }}
+      
+      - name: Build site
+        run: npm run build
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add lib/tools.ts
+          git commit -m "Add new tool: ${{ github.event.inputs.tool_name }}" || echo "No changes to commit"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      
+      - name: Summary
+        run: |
+          echo "✅ Tool added successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Tool Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Name**: ${{ github.event.inputs.tool_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Category**: ${{ github.event.inputs.category }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Affiliate URL**: ${{ github.event.inputs.partnerstack_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the changes in \`lib/tools.ts\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Tool page available at: \`/tools/[tool-slug]\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. Affiliate link available at: \`/go/[tool-slug]\`" >> $GITHUB_STEP_SUMMARY
