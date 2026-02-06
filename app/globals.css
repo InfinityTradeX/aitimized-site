@@ -49,3 +49,66 @@
 body {
   @apply bg-gray-50 text-gray-900;
 }
+
+/* --- AITIMIZED BRAND STYLING 2026 --- */
+
+:root {
+  --primary-blue: #0070f3;    /* Professional AI Blue */
+  --soft-bg: #f8fafc;        /* Clean, non-distracting white */
+  --text-dark: #1e293b;      /* Sharp, readable text */
+  --radius: 12px;            /* Modern rounded corners */
+}
+
+/* Make the whole site feel like a SaaS app */
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--soft-bg);
+  color: var(--text-dark);
+  line-height: 1.7;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* THE PARTNERSTACK BUTTON: High-conversion "Lego" */
+.affiliate-btn {
+  display: inline-flex;
+  align-items: center;
+  background: var(--primary-blue);
+  color: white !important;
+  padding: 16px 32px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 112, 243, 0.3);
+  margin: 20px 0;
+}
+
+.affiliate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 25px -5px rgba(0, 112, 243, 0.4);
+}
+
+/* THE "VERDICT" BOX: For instant trust */
+.verdict-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-left: 6px solid var(--primary-blue);
+  padding: 25px;
+  border-radius: var(--radius);
+  margin: 30px 0;
+}
+
+/* Styling for Google Adsense placeholders */
+.ad-slot {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
