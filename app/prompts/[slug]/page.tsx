@@ -4,9 +4,9 @@ import { markdownToHtml } from '@/lib/markdown'
 import Link from 'next/link'
 
 interface PromptPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PromptPageProps): Promise<Metadata> {
-  const prompt = getContentItemBySlug('prompts', params.slug)
+  const { slug } = await params
+  const prompt = getContentItemBySlug('prompts', slug)
   
   if (!prompt) {
     return {
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: PromptPageProps): Promise<Met
 }
 
 export default async function PromptPage({ params }: PromptPageProps) {
-  const prompt = getContentItemBySlug('prompts', params.slug)
+  const { slug } = await params
+  const prompt = getContentItemBySlug('prompts', slug)
 
   if (!prompt) {
     return (

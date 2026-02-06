@@ -4,9 +4,9 @@ import { markdownToHtml } from '@/lib/markdown'
 import Link from 'next/link'
 
 interface AgentPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: AgentPageProps): Promise<Metadata> {
-  const agent = getContentItemBySlug('agents', params.slug)
+  const { slug } = await params
+  const agent = getContentItemBySlug('agents', slug)
   
   if (!agent) {
     return {
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: AgentPageProps): Promise<Meta
 }
 
 export default async function AgentPage({ params }: AgentPageProps) {
-  const agent = getContentItemBySlug('agents', params.slug)
+  const { slug } = await params
+  const agent = getContentItemBySlug('agents', slug)
 
   if (!agent) {
     return (

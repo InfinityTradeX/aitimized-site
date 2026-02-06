@@ -4,9 +4,9 @@ import { markdownToHtml } from '@/lib/markdown'
 import Link from 'next/link'
 
 interface WorkflowPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: WorkflowPageProps): Promise<Metadata> {
-  const workflow = getContentItemBySlug('workflows', params.slug)
+  const { slug } = await params
+  const workflow = getContentItemBySlug('workflows', slug)
   
   if (!workflow) {
     return {
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: WorkflowPageProps): Promise<M
 }
 
 export default async function WorkflowPage({ params }: WorkflowPageProps) {
-  const workflow = getContentItemBySlug('workflows', params.slug)
+  const { slug } = await params
+  const workflow = getContentItemBySlug('workflows', slug)
 
   if (!workflow) {
     return (
