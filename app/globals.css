@@ -118,10 +118,9 @@ body {
   );
   background-size: 200% 200%;
   animation: border-beam 6s linear infinite;
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  /* CLEANED MASKING */
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-out; 
+  mask-composite: subtract;
   pointer-events: none;
 }

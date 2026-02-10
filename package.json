@@ -4,7 +4,6 @@
   "description": "AI workflows, prompts, and automation blueprints - curated content hub for AI-powered business optimization",
   "private": true,
   "scripts": {
-  "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -24,8 +23,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.17",
-    "eslint": "9.39.2",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "15.0.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.7.0"
