@@ -3,98 +3,87 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'aitimized - AI Workflows & Automation Hub',
-  description: 'Discover AI workflows, prompts, and automation blueprints to optimize your business with artificial intelligence',
+import { notFound } from "next/navigation";
+
+// FETCH FUNCTION: Connects to your "Buzz Machine" Engine
+async function getToolData(slug: string) {
+  const res = await fetch(
+    `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Buzz%20Feed?filterByFormula={Slug}='${slug}'`,
+    {
+      headers: { Authorization: `Bearer ${process.env.AIRTABLE_TOKEN}` },
+      next: { revalidate: 60 },
+    }
+  );
+  const data = await res.json();
+  return data.records?.[0]?.fields;
 }
 
-export default function HomePage() {
+export default async function ToolPage({ params }: { params: { slug: string } }) {
+  const tool = await getToolData(params.slug);
+
+  if (!tool) return notFound();
+
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">
-            AI Workflows & Automation Hub
-          </h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Discover curated AI workflows, prompts, and automation blueprints to optimize your business processes
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/workflows" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
-              Explore Workflows
-            </Link>
-            <Link href="/prompts" className="btn-secondary bg-primary-700 text-white hover:bg-primary-600">
-              Browse Prompts
-            </Link>
-          </div>
+    <main className="min-h-screen p-4 md:p-12 max-w-7xl mx-auto">
+      {/* THE BENTO GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        {/* 1. MAIN CONTENT TILE (The Article) */}
+        <div className="md:col-span-3 glass-card p-8 md:p-12">
+          <header className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                AI Review
+              </span>
+              <span className="text-gray-500 text-xs">Updated 2026</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
+              {tool["Tool Name"] || "AI Tool Review"}
+            </h1>
+          </header>
+
+          <article className="prose-modern">
+            {/* The actual OpenAI content from Airtable */}
+            <div dangerouslySetInnerHTML={{ __html: tool["Article Content"] }} />
+          </article>
         </div>
-      </section>
 
-      {/* Content Sections */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Workflows Card */}
-          <Link href="/workflows" className="card group">
-            <div className="text-4xl mb-4">🔄</div>
-            <h2 className="text-2xl font-bold mb-3 group-hover:text-primary-600 transition-colors">
-              Workflows
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Complete end-to-end automation workflows for various business processes. Learn how to chain AI tools together for maximum efficiency.
-            </p>
-            <div className="text-primary-600 font-semibold">
-              Explore Workflows →
-            </div>
-          </Link>
-
-          {/* Prompts Card */}
-          <Link href="/prompts" className="card group">
-            <div className="text-4xl mb-4">💬</div>
-            <h2 className="text-2xl font-bold mb-3 group-hover:text-primary-600 transition-colors">
-              Prompts
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Ready-to-use AI prompts for ChatGPT, Claude, and other language models. Optimized for various use cases and industries.
-            </p>
-            <div className="text-primary-600 font-semibold">
-              Browse Prompts →
-            </div>
-          </Link>
-
-          {/* Agents Card */}
-          <Link href="/agents" className="card group">
-            <div className="text-4xl mb-4">🤖</div>
-            <h2 className="text-2xl font-bold mb-3 group-hover:text-primary-600 transition-colors">
-              Agents
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Intelligent AI agents configured for specific tasks. Pre-built configurations and custom instructions for autonomous AI systems.
-            </p>
-            <div className="text-primary-600 font-semibold">
-              Discover Agents →
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-primary-600 mb-2">50+</div>
-              <div className="text-gray-600">Curated Workflows</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary-600 mb-2">100+</div>
-              <div className="text-gray-600">AI Prompts</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-primary-600 mb-2">30+</div>
-              <div className="text-gray-600">AI Agents</div>
+        {/* 2. SIDEBAR BENTO TILES */}
+        <div className="md:col-span-1 space-y-6">
+          
+          {/* Quick Stats Tile */}
+          <div className="glass-card p-6 bg-gradient-to-br from-blue-500/5 to-purple-500/5">
+            <h3 className="text-sm font-bold text-gray-500 uppercase mb-4">The Verdict</h3>
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs text-gray-400">Benefit</p>
+                <p className="font-bold">{tool["Optimization Benefit"] || "High ROI"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Price Point</p>
+                <p className="font-bold text-green-500">{tool["Price Point"] || "Contact Sales"}</p>
+              </div>
             </div>
           </div>
+
+          {/* CTA Tile */}
+          <div className="glass-card p-6 bg-blue-600 border-none group">
+            <a href={tool["Affiliate Link"]} className="block text-center">
+              <p className="text-white font-black text-xl mb-1">Try {tool["Tool Name"]}</p>
+              <p className="text-blue-100 text-sm opacity-80 group-hover:opacity-100 transition-opacity">
+                Get the AI Edge →
+              </p>
+            </a>
+          </div>
+
+          {/* Category Tile */}
+          <div className="glass-card p-6 text-center">
+             <p className="text-xs text-gray-500 mb-1">Category</p>
+             <p className="font-medium">{tool["Category"] || "Fintech"}</p>
+          </div>
+
         </div>
-      </section>
-    </div>
-  )
+      </div>
+    </main>
+  );
 }
