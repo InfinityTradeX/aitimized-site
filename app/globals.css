@@ -118,8 +118,11 @@ body {
   );
   background-size: 200% 200%;
   animation: border-beam 6s linear infinite;
-  /* CLEANED MASKING */
+  
+  /* Clears the compatibility warning from your image */
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  
   -webkit-mask-composite: source-out; 
   mask-composite: subtract;
   pointer-events: none;

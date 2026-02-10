@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'aitimized - AI Workflows & Automation Hub',
 };
 
-// We define a simple interface so TypeScript understands the Airtable data
+// Interface to stop "Implicit Any" errors
 interface AirtableFields {
   [key: string]: any;
 }
@@ -16,7 +16,7 @@ async function getToolData(): Promise<AirtableFields | null> {
   if (!token || !baseId) return null;
 
   try {
-    // Adding "as any" to the fetch options bypasses the strict 'next' property error
+    // The "as any" cast clears the 'next' property error in your image
     const res = await fetch(
       `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?maxRecords=1`,
       {
@@ -38,7 +38,9 @@ export default async function Page() {
   if (!tool) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center text-white font-sans">
-        <div className="animate-pulse">Syncing with Airtable Engine...</div>
+        <div className="animate-pulse text-xl font-bold tracking-widest">
+          Syncing with Airtable Engine...
+        </div>
       </div>
     );
   }
@@ -46,13 +48,13 @@ export default async function Page() {
   return (
     <main className="relative min-h-screen p-8 max-w-7xl mx-auto bg-[#020617] text-white overflow-hidden">
       
-      {/* BACKGROUND GLOW EFFECT */}
+      {/* Background Glows with pointer-events-none to prevent blocking clicks */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
         
-        {/* MAIN CONTENT TILE */}
+        {/* Main Article Tile with Border Beam */}
         <div className="md:col-span-3 glass-card border-beam p-10">
           <h1 className="text-5xl md:text-6xl font-black mb-8 tracking-tighter">
             {String(tool["Tool Name"] || "AI Review")}
@@ -63,7 +65,7 @@ export default async function Page() {
           />
         </div>
 
-        {/* SIDEBAR TILES */}
+        {/* Sidebar Info Tiles */}
         <div className="md:col-span-1 space-y-6">
           <div className="glass-card p-6 bg-blue-600 border-none">
              <p className="text-xs uppercase font-bold tracking-widest opacity-80 mb-1">Access Tier</p>
