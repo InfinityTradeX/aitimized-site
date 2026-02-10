@@ -4,8 +4,9 @@
   "description": "AI workflows, prompts, and automation blueprints - curated content hub for AI-powered business optimization",
   "private": true,
   "scripts": {
+  "scripts": {
     "dev": "next dev",
-    "build": "build": "next build --no-lint && next build"
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -14,6 +15,7 @@
     "next": "^15.0.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "framer-motion": "^11.0.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1"
   },
