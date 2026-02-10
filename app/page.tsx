@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
+import { notFound } from "next/navigation";
 
+// 1. Metadata must be at the very top level
 export const metadata: Metadata = {
   title: 'aitimized - AI Workflows & Automation Hub',
 };
 
-// Interface to stop "Implicit Any" errors
+// Interface to stop TypeScript "Implicit Any" errors
 interface AirtableFields {
   [key: string]: any;
 }
@@ -16,7 +18,7 @@ async function getToolData(): Promise<AirtableFields | null> {
   if (!token || !baseId) return null;
 
   try {
-    // The "as any" cast clears the 'next' property error in your image
+    // The "as any" cast clears the 'next' property error in your editor
     const res = await fetch(
       `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?maxRecords=1`,
       {
@@ -48,13 +50,13 @@ export default async function Page() {
   return (
     <main className="relative min-h-screen p-8 max-w-7xl mx-auto bg-[#020617] text-white overflow-hidden">
       
-      {/* Background Glows with pointer-events-none to prevent blocking clicks */}
+      {/* Background Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
         
-        {/* Main Article Tile with Border Beam */}
+        {/* MAIN CONTENT TILE - With Border Beam */}
         <div className="md:col-span-3 glass-card border-beam p-10">
           <h1 className="text-5xl md:text-6xl font-black mb-8 tracking-tighter">
             {String(tool["Tool Name"] || "AI Review")}
@@ -65,7 +67,7 @@ export default async function Page() {
           />
         </div>
 
-        {/* Sidebar Info Tiles */}
+        {/* SIDEBAR TILES */}
         <div className="md:col-span-1 space-y-6">
           <div className="glass-card p-6 bg-blue-600 border-none">
              <p className="text-xs uppercase font-bold tracking-widest opacity-80 mb-1">Access Tier</p>

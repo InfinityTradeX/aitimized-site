@@ -119,7 +119,7 @@ body {
   background-size: 200% 200%;
   animation: border-beam 6s linear infinite;
   
-  /* Clears the compatibility warning from your image */
+  /* Fixed Masking for both Chrome and Safari */
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   
