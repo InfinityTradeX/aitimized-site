@@ -49,6 +49,8 @@ async function getToolData(): Promise<AirtableFields | null> {
 export default async function Page() {
   const tool = await getToolData()
 
+  console.log("CTO DEBUG - Tool Data:", tool);
+
   if (!tool) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-[color:var(--foreground)] font-sans">
