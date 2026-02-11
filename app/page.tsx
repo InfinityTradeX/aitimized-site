@@ -19,13 +19,13 @@ async function getToolData(): Promise<AirtableFields | null> {
 
   try {
     // The "as any" cast clears the 'next' property error in your editor
-    const res = await fetch(
-      `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?maxRecords=1`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        next: { revalidate: 60 },
-      } as any 
-    );
+const res = await fetch(
+  `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?filterByFormula={Status}='Live'&maxRecords=1`,
+  {
+    headers: { Authorization: `Bearer ${token}` },
+    next: { revalidate: 60 },
+  } as any 
+);
     const data = await res.json();
     return data.records?.[0]?.fields || null;
   } catch (e) {

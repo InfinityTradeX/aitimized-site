@@ -1,6 +1,7 @@
 {
   "name": "aitimized-site",
   "version": "1.0.0",
+  "type": "module",
   "description": "AI workflows, prompts, and automation blueprints - curated content hub for AI-powered business optimization",
   "private": true,
   "scripts": {
