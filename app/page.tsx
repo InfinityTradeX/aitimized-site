@@ -1,94 +1,109 @@
 import { Metadata } from 'next';
-import { notFound } from "next/navigation";
 
-// 1. Metadata must be at the very top level
 export const metadata: Metadata = {
   title: 'aitimized - AI Workflows & Automation Hub',
 };
 
-// Interface to stop TypeScript "Implicit Any" errors
 interface AirtableFields {
-  [key: string]: any;
+  id: string;
+  fields: {
+    "Tool Name"?: string;
+    "Article Content"?: string;
+    "Price Point"?: string;
+    "Affiliate Link"?: string;
+    "Category"?: string;
+    "Optimization Content"?: string;
+    "Slug"?: string;
+    "Status"?: string;
+  };
 }
 
-async function getToolData(): Promise<AirtableFields | null> {
+async function getTools(): Promise<AirtableFields[]> {
   const token = process.env.AIRTABLE_TOKEN;
   const baseId = process.env.AIRTABLE_BASE_ID;
 
-  if (!token || !baseId) return null;
+  if (!token || !baseId) return [];
 
   try {
-    // The "as any" cast clears the 'next' property error in your editor
-const res = await fetch(
-  `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?filterByFormula={Status}='Live'&maxRecords=1`,
-  {
-    headers: { Authorization: `Bearer ${token}` },
-    next: { revalidate: 60 },
-  } as any 
-);
+    // We use Buzz%20Feed to match your tab name exactly
+    const res = await fetch(
+      `https://api.airtable.com/v0/${baseId}/Buzz%20Feed?filterByFormula=AND({Status}='Live', {Slug}!='')`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        next: { revalidate: 60 },
+      } as any
+    );
+
+    if (!res.ok) return [];
     const data = await res.json();
-    return data.records?.[0]?.fields || null;
+    return data.records || [];
   } catch (e) {
-    console.error("Fetch error:", e);
-    return null;
+    console.error("Airtable Fetch Error:", e);
+    return [];
   }
 }
 
 export default async function Page() {
-  const tool = await getToolData();
+  const tools = await getTools();
 
-  if (!tool) {
+  // If no tools found, show the loading/syncing state
+  if (tools.length === 0) {
     return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center text-white font-sans">
+      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-white font-sans">
         <div className="animate-pulse text-xl font-bold tracking-widest">
           Syncing with Airtable Engine...
         </div>
+        <p className="text-gray-500 mt-4 text-sm">Check Airtable for "Live" status & Slugs</p>
       </div>
     );
   }
 
   return (
-    <main className="relative min-h-screen p-8 max-w-7xl mx-auto bg-[#020617] text-white overflow-hidden">
-      
+    <main className="relative min-h-screen p-8 max-w-7xl mx-auto bg-[#020617] text-white">
       {/* Background Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="relative z-10">
+        <header className="mb-12">
+          <h1 className="text-4xl font-black tracking-tighter text-blue-500">AITIMIZED</h1>
+          <p className="text-gray-400">Precision AI Workflows</p>
+        </header>
 
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
-        
-        {/* MAIN CONTENT TILE - With Border Beam */}
-        <div className="md:col-span-3 glass-card border-beam p-10">
-          <h1 className="text-5xl md:text-6xl font-black mb-8 tracking-tighter">
-            {String(tool["Tool Name"] || "AI Review")}
-          </h1>
-          <article 
-            className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-p:text-gray-300" 
-            dangerouslySetInnerHTML={{ __html: String(tool["Article Content"] || "") }} 
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {tools.map((tool) => (
+            <div key={tool.id} className="glass-card p-6 border border-white/10 hover:border-blue-500/50 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[10px] bg-blue-600 px-2 py-1 rounded-full font-bold uppercase tracking-widest">
+                    {tool.fields.Category || "AI Tool"}
+                  </span>
+                </div>
+                
+                <h2 className="text-2xl font-black mb-3">{tool.fields["Tool Name"]}</h2>
+                
+                {/* We use a truncated version for the grid view */}
+                <div 
+                  className="text-gray-400 text-sm line-clamp-4 mb-6"
+                  dangerouslySetInnerHTML={{ __html: tool.fields["Article Content"] || "" }} 
+                />
+              </div>
 
-        {/* SIDEBAR TILES */}
-        <div className="md:col-span-1 space-y-6">
-          <div className="glass-card p-6 bg-blue-600 border-none">
-             <p className="text-xs uppercase font-bold tracking-widest opacity-80 mb-1">Access Tier</p>
-             <p className="font-black text-3xl mb-6">{String(tool["Price Point"] || "N/A")}</p>
-             <a 
-               href={String(tool["Affiliate Link"] || "#")} 
-               className="block text-center bg-white text-blue-700 py-4 rounded-2xl font-black hover:scale-[1.02] transition-all shadow-lg"
-             >
-               Get Started →
-             </a>
-          </div>
-          
-          <div className="glass-card p-6">
-             <p className="text-xs uppercase font-bold tracking-widest text-gray-500 mb-1">Industry</p>
-             <p className="font-bold text-xl">{String(tool["Category"] || "General AI")}</p>
-          </div>
-
-          <div className="glass-card p-6">
-             <p className="text-xs uppercase font-bold tracking-widest text-gray-500 mb-1">Primary ROI</p>
-             <p className="font-bold text-xl text-blue-400">{String(tool["Optimization Benefit"] || "Efficiency")}</p>
-          </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-t border-white/5 pt-4">
+                  <span className="text-xs text-gray-500 uppercase font-bold">Price</span>
+                  <span className="font-bold text-blue-400">{tool.fields["Price Point"]}</span>
+                </div>
+                
+                <a 
+                  href={tool.fields["Affiliate Link"] || "#"}
+                  target="_blank"
+                  className="block w-full text-center bg-white text-black py-3 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-colors"
+                >
+                  Visit Tool →
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
