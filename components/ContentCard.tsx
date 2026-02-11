@@ -37,16 +37,16 @@ export default function ContentCard({
         </span>
       </div>
       
-      <p className="text-gray-600 mb-4 line-clamp-2">
+      <p className="text-[color:var(--muted)] mb-4 line-clamp-2">
         {description}
       </p>
 
       {tools.length > 0 && (
         <div className="mb-3">
-          <div className="text-sm font-semibold text-gray-700 mb-1">Tools:</div>
+          <div className="text-sm font-semibold text-[color:var(--muted)] mb-1">Tools:</div>
           <div className="flex flex-wrap gap-1">
             {tools.map((tool) => (
-              <span key={tool} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+              <span key={tool} className="text-xs bg-white/5 text-[color:var(--muted)] px-2 py-1 rounded border border-white/10">
                 {tool}
               </span>
             ))}
@@ -64,7 +64,7 @@ export default function ContentCard({
         </div>
       )}
 
-      <div className="mt-4 text-sm text-gray-500">
+      <div className="mt-4 text-sm text-[color:var(--muted)]">
         {new Date(date).toLocaleDateString('en-US', { 
           year: 'numeric', 
           month: 'long', 

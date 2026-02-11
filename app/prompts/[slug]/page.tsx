@@ -40,7 +40,7 @@ export default async function PromptPage({ params }: PromptPageProps) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-3xl font-bold mb-4">Prompt Not Found</h1>
-        <p className="text-gray-600 mb-8">The prompt you're looking for doesn't exist.</p>
+        <p className="text-[color:var(--muted)] mb-8">The prompt you're looking for doesn't exist.</p>
         <Link href="/prompts" className="btn-primary">
           Back to Prompts
         </Link>
@@ -57,18 +57,18 @@ export default async function PromptPage({ params }: PromptPageProps) {
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
-      <Link href="/prompts" className="text-primary-600 hover:text-primary-700 mb-4 inline-block">
+      <Link href="/prompts" className="text-[color:var(--primary)] hover:text-[color:var(--foreground)] mb-4 inline-block">
         ← Back to Prompts
       </Link>
 
       <header className="mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <h1 className="text-4xl font-bold">{prompt.title}</h1>
+          <h1 className="font-heading text-4xl font-black tracking-tight">{prompt.title}</h1>
           <span className={difficultyClass}>{prompt.difficulty}</span>
         </div>
-        <p className="text-xl text-gray-600 mb-4">{prompt.description}</p>
+        <p className="text-xl text-[color:var(--muted)] mb-4">{prompt.description}</p>
         
-        <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+        <div className="flex items-center gap-4 text-sm text-[color:var(--muted)] mb-4">
           <time>
             {new Date(prompt.date).toLocaleDateString('en-US', { 
               year: 'numeric', 
@@ -80,10 +80,10 @@ export default async function PromptPage({ params }: PromptPageProps) {
 
         {prompt.tools.length > 0 && (
           <div className="mb-4">
-            <div className="text-sm font-semibold text-gray-700 mb-2">Tools Used:</div>
+            <div className="text-sm font-semibold text-[color:var(--muted)] mb-2">Tools Used:</div>
             <div className="flex flex-wrap gap-2">
               {prompt.tools.map((tool) => (
-                <span key={tool} className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm">
+                <span key={tool} className="bg-white/5 text-[color:var(--muted)] px-3 py-1 rounded text-sm border border-white/10">
                   {tool}
                 </span>
               ))}
@@ -102,8 +102,8 @@ export default async function PromptPage({ params }: PromptPageProps) {
         )}
       </header>
 
-      <div 
-        className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-primary-600 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700 prose-li:text-gray-700"
+      <div
+        className="prose prose-lg max-w-none text-[color:var(--foreground)]"
         dangerouslySetInnerHTML={{ __html: contentHtml }}
       />
     </article>

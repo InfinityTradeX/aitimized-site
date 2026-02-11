@@ -49,32 +49,31 @@ export default async function Page() {
   // If no tools found, show the loading/syncing state
   if (tools.length === 0) {
     return (
-      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-white font-sans">
+      <div className="min-h-screen flex flex-col items-center justify-center text-[color:var(--foreground)] font-sans">
         <div className="animate-pulse text-xl font-bold tracking-widest">
           Syncing with Airtable Engine...
         </div>
-        <p className="text-gray-500 mt-4 text-sm">Check Airtable for "Live" status & Slugs</p>
+        <p className="text-[color:var(--muted)] mt-4 text-sm">Check Airtable for "Live" status & Slugs</p>
       </div>
     );
   }
 
   return (
-    <main className="relative min-h-screen p-8 max-w-7xl mx-auto bg-[#020617] text-white">
-      {/* Background Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-      
+    <main className="relative min-h-screen p-8 max-w-7xl mx-auto text-[color:var(--foreground)]">
       <div className="relative z-10">
         <header className="mb-12">
-          <h1 className="text-4xl font-black tracking-tighter text-blue-500">AITIMIZED</h1>
-          <p className="text-gray-400">Precision AI Workflows</p>
+          <h1 className="font-heading text-4xl md:text-5xl font-black tracking-tighter text-[color:var(--foreground)]">
+            AITIMIZED
+          </h1>
+          <p className="text-[color:var(--muted)]">Precision AI Workflows</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {tools.map((tool) => (
-            <div key={tool.id} className="glass-card p-6 border border-white/10 hover:border-blue-500/50 transition-all flex flex-col justify-between">
+            <div key={tool.id} className="glass-card p-6 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] bg-blue-600 px-2 py-1 rounded-full font-bold uppercase tracking-widest">
+                  <span className="text-[10px] bg-[color:var(--primary)]/90 px-2 py-1 rounded-full font-bold uppercase tracking-widest">
                     {tool.fields.Category || "AI Tool"}
                   </span>
                 </div>
@@ -83,21 +82,21 @@ export default async function Page() {
                 
                 {/* We use a truncated version for the grid view */}
                 <div 
-                  className="text-gray-400 text-sm line-clamp-4 mb-6"
+                  className="text-[color:var(--muted)] text-sm line-clamp-4 mb-6"
                   dangerouslySetInnerHTML={{ __html: tool.fields["Article Content"] || "" }} 
                 />
               </div>
 
               <div className="space-y-4">
-                <div className="flex justify-between items-center border-t border-white/5 pt-4">
-                  <span className="text-xs text-gray-500 uppercase font-bold">Price</span>
-                  <span className="font-bold text-blue-400">{tool.fields["Price Point"]}</span>
+                <div className="flex justify-between items-center border-t border-white/10 pt-4">
+                  <span className="text-xs text-[color:var(--muted)] uppercase font-bold">Price</span>
+                  <span className="font-bold text-[color:var(--primary)]">{tool.fields["Price Point"]}</span>
                 </div>
                 
                 <a 
                   href={tool.fields["Affiliate Link"] || "#"}
                   target="_blank"
-                  className="block w-full text-center bg-white text-black py-3 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-colors"
+                  className="block w-full text-center bg-[color:var(--primary)] text-white py-3 rounded-xl font-bold hover:shadow-[0_0_30px_rgba(59,130,246,0.35)] transition-shadow"
                 >
                   Visit Tool →
                 </a>
