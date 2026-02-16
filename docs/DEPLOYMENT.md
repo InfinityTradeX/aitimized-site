@@ -8,7 +8,7 @@ This guide explains how to deploy the aitimized.com site to production.
 
 ### Setup
 
-The site is configured for automatic deployment to GitHub Pages using GitHub Actions.
+The site is configured for automatic deployment to GitHub Pages using GitHub's native Actions integration.
 
 **Prerequisites:**
 1. Repository hosted on GitHub
@@ -19,17 +19,12 @@ The site is configured for automatic deployment to GitHub Pages using GitHub Act
 
 The deployment happens automatically when:
 - Code is pushed to `main` or `master` branch
-- Workflow can also be triggered manually from Actions tab
+- Using GitHub's built-in Pages deployment with Actions
 
-**Workflow steps:**
-1. Checkout code
-2. Setup Node.js 20
-3. Install dependencies with `npm ci`
-4. Build site with `npm run build`
-5. Upload `out/` directory as artifact
-6. Deploy to GitHub Pages
-
-**Workflow file:** `.github/workflows/deploy.yml`
+**Deployment process:**
+1. GitHub Actions detects push to main/master
+2. Automatically builds the Next.js static site
+3. Deploys the `out/` directory to GitHub Pages
 
 ### Enabling GitHub Pages
 
@@ -38,6 +33,8 @@ The deployment happens automatically when:
 3. Under "Build and deployment":
    - Source: Select "GitHub Actions"
 4. Save settings
+
+The native GitHub Pages Actions will automatically handle the build and deployment.
 
 ### Live URL
 
@@ -49,8 +46,7 @@ https://infinitytradex.github.io/aitimized-site/
 ### Monitoring Deployments
 
 - View deployment status in the Actions tab
-- Check deployment badge in README
-- Review deployment logs for any issues
+- Check deployment logs for any issues
 
 ## Manual Deployment
 
